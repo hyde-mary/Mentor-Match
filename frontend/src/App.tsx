@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { deleteUsers } from "./api/deleteUsers";
-import { getUsers } from "./api/getUsers";
+import { getUsers, TUser } from "./api/getUsers";
 import { createUsers } from "./api/createUsers";
 
 function App() {
