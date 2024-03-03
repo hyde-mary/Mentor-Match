@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
 import Account from "../models/Account";
+import { clerkClient } from "@clerk/clerk-sdk-node";
+
 
 const router = express.Router();
 
@@ -45,6 +47,20 @@ router.post("/login", async (req: Request, res: Response) => {
     console.error("Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
+});
+
+// update roels for clerk
+router.post('/updateRole', async (req, res) => {
+ 
+  const { role, userId } = req.body;
+ 
+  const createRole = await clerkClient.users.updateUserMetadata(userId, {
+    publicMetadata: {
+      role
+    }
+  });
+  
+  res.status(200).json(createRole);
 });
 
 export default router;

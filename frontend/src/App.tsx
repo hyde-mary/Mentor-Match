@@ -24,7 +24,7 @@ function App() {
 
   async function handleDelete(userId: string) {
     await deleteUsers(userId);
-    setUsers(users.filter(user => user._id !== userId));
+    setUsers(users.filter((user) => user._id !== userId));
   }
 
   useEffect(() => {

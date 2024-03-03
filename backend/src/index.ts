@@ -4,6 +4,7 @@ import { config } from "dotenv";
 import cors from "cors";
 import accountRoutes from "./routes/accountRoutes";
 import userRoutes from "./routes/usersRoutes";
+
 config();
 
 const PORT = 5000;
