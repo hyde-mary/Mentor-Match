@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
+type TUser = {
+  _id: string;
+  first_name: string;
+  last_name: string;
+  program: string;
+};
+
 function App() {
   // form states
   const [firstName, setFirstName] = useState("");
@@ -8,12 +15,12 @@ function App() {
   const [program, setProgram] = useState("");
 
   // data states
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<TUser[]>([]);
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleCreate(e: React.FormEvent) {
     e.preventDefault(); // this is so when it submits, it doesnt refresh the page
 
-    await fetch("http://localhost:5000/users", {
+    const response = await fetch("http://localhost:5000/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,9 +32,18 @@ function App() {
       }),
     });
 
+    const user = await response.json();
+    setUsers([...users, user]);
     setFirstName("");
     setLastName("");
     setProgram("");
+  }
+
+  async function handleDelete(userId: string) {
+    await fetch(`http://localhost:5000/users/${userId}`, {
+      method: "DELETE",
+    });
+    setUsers(users.filter(user => user._id !== userId));
   }
 
   useEffect(() => {
@@ -42,13 +58,14 @@ function App() {
   return (
     <div>
       <ul className="users">
-        {
-          users.map((user) => (
-            <li key={user._id}>{user.first_name}</li>
-          ))
-        }
+        {users.map((user) => (
+          <li key={user._id}>
+            {user.first_name}
+            <button onClick={() => handleDelete(user._id)}>delete</button>
+          </li>
+        ))}
       </ul>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleCreate}>
         <label htmlFor="first-name">First Name</label>
         <input
           id="first-name"

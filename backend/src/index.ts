@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import User from "./models/User";
 import { config } from "dotenv";
-import cors from 'cors';
+import cors from "cors";
 config();
 
 const PORT = 5000;
@@ -23,14 +23,22 @@ app.post("/users", async (req: Request, res: Response) => {
     last_name: req.body.last_name,
     program: req.body.program,
   });
-  
+
   const createdUser = await newUser.save();
   res.json(createdUser);
 });
 
-mongoose
-  .connect(process.env.MONGO_URL!)
-  .then(() => {
-    console.log(`listening on port ${PORT}`);
-    app.listen(PORT);
-  });
+// delete request
+app.delete("/users/:userId", async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  await User.findByIdAndDelete(userId);
+
+  res.json({
+    message: "successfully deleted the entry",
+  })
+});
+
+mongoose.connect(process.env.MONGO_URL!).then(() => {
+  console.log(`listening on port ${PORT}`);
+  app.listen(PORT);
+});
