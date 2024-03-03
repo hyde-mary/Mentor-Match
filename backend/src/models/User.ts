@@ -11,11 +11,9 @@ const UserSchema = new Schema(
     // },
     first_name: {
       type: String,
-      required: true,
     },
     last_name: {
       type: String,
-      required: true,
     },
     // university_number: {
     //     type: Number,
@@ -27,7 +25,6 @@ const UserSchema = new Schema(
     // },
     program: {
       type: String,
-      required: false,
     },
     // password: {
     //     type: String,

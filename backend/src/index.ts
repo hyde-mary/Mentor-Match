@@ -2,11 +2,12 @@ import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import User from "./models/User";
 import { config } from "dotenv";
+import cors from 'cors';
 config();
 
 const PORT = 5000;
-
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.post("/users", async (req: Request, res: Response) => {
