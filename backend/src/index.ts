@@ -1,6 +1,8 @@
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import User from "./models/User";
+import { config } from "dotenv";
+config();
 
 const PORT = 5000;
 
@@ -20,9 +22,7 @@ app.post("/users", async (req: Request, res: Response) => {
 });
 
 mongoose
-  .connect(
-    
-  )
+  .connect(process.env.MONGO_URL!)
   .then(() => {
     console.log(`listening on port ${PORT}`);
     app.listen(PORT);
