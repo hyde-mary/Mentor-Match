@@ -10,8 +10,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.post("/users", async (req: Request, res: Response) => {
+// get request
+app.get("/users", async (req: Request, res: Response) => {
+  const users = await User.find();
+  res.json(users);
+});
 
+// post request
+app.post("/users", async (req: Request, res: Response) => {
   const newUser = new User({
     first_name: req.body.first_name,
     last_name: req.body.last_name,

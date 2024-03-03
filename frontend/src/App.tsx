@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
+  // form states
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [program, setProgram] = useState("");
+
+  // data states
+  const [users, setUsers] = useState([]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault(); // this is so when it submits, it doesnt refresh the page
@@ -19,15 +23,31 @@ function App() {
         last_name: lastName,
         program,
       }),
-    })
+    });
 
     setFirstName("");
     setLastName("");
     setProgram("");
-  };
+  }
+
+  useEffect(() => {
+    async function fetchUsers() {
+      const response = await fetch("http://localhost:5000/users");
+      const newUsers = await response.json();
+      setUsers(newUsers);
+    }
+    fetchUsers();
+  }, []);
 
   return (
     <div>
+      <ul className="users">
+        {
+          users.map((user) => (
+            <li key={user._id}>{user.first_name}</li>
+          ))
+        }
+      </ul>
       <form onSubmit={handleSubmit}>
         <label htmlFor="first-name">First Name</label>
         <input
