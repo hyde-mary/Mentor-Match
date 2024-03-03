@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/account", accountRoutes);
+app.use("/accounts", accountRoutes);
 app.use("/users", userRoutes);
 
 mongoose.connect(process.env.MONGO_URL!)
