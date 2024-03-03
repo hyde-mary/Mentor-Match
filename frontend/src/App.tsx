@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-
-type TUser = {
-  _id: string;
-  first_name: string;
-  last_name: string;
-  program: string;
-};
+import { deleteUsers } from "./api/deleteUsers";
+import { getUsers } from "./api/getUsers";
+import { createUsers } from "./api/createUsers";
 
 function App() {
   // form states
@@ -19,20 +15,7 @@ function App() {
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault(); // this is so when it submits, it doesnt refresh the page
-
-    const response = await fetch("http://localhost:5000/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        first_name: firstName,
-        last_name: lastName,
-        program,
-      }),
-    });
-
-    const user = await response.json();
+    const user = await createUsers(firstName, lastName, program);
     setUsers([...users, user]);
     setFirstName("");
     setLastName("");
@@ -40,16 +23,13 @@ function App() {
   }
 
   async function handleDelete(userId: string) {
-    await fetch(`http://localhost:5000/users/${userId}`, {
-      method: "DELETE",
-    });
+    await deleteUsers(userId);
     setUsers(users.filter(user => user._id !== userId));
   }
 
   useEffect(() => {
     async function fetchUsers() {
-      const response = await fetch("http://localhost:5000/users");
-      const newUsers = await response.json();
+      const newUsers = await getUsers();
       setUsers(newUsers);
     }
     fetchUsers();
